@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "../public",
+    "module": "esnext",
+    "outFile": "../public/tsc.js",
+    "sourceMap": true,
+    "jsx": "react"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "src/App.tsx"
+  ]
+}

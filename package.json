@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/react": "15.6.0",
     "csvtojson": "^2.0.8",
     "papaparse": "^4.6.3",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
     "react-scripts": "2.1.5"
+  },
+  "devDependencies": {
+    "typescript": "^2.4.2"
   },
   "scripts": {
     "start": "react-scripts start",

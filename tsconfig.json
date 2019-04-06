@@ -1,16 +1,32 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "outDir": "../public",
     "module": "esnext",
-    "outFile": "../public/tsc.js",
     "sourceMap": true,
-    "jsx": "react"
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
   },
   "exclude": [
-    "node_modules"
+    "./node_modules"
   ],
   "files": [
     "src/App.tsx"
+  ],
+  "include": [
+    "src"
   ]
 }

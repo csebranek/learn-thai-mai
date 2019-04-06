@@ -3,17 +3,48 @@ import '../App.css';
 import {Data} from '../data/phrases.js'
 import * as React from 'react'
 import {JSONResult} from "csvtojson/v2/lineToJson";
+import {
+  Form,
+  Row,
+  Container,
+  Col,
+  FormControl,
+  FormLabel,
+  FormText,
+  FormGroup,
+  Button,
+  Alert,
+  Dropdown
+} from 'react-bootstrap';
 
 interface ISomeObject{
   english?:string;
   thai?:string;
-  data:JSON
+  data:JSON;
+  subsetData:JSON;
 }
 
-class App extends React.Component<{},{data:JSONResult,val:string,pos:number,entered:string,actual:string,feedback:string}> {
+interface IState {
+  data:JSONResult;
+  subsetData:JSONResult;
+  category:string;
+  val:string;
+  pos:number;
+  entered:string;
+  actual:string;
+  feedback:Variant;
+  display:string;
+  score:number;
+  tries:number;
+  english:string;
+}
+
+export type Variant = "success" | "danger" | undefined
+
+class App extends React.Component<{},IState> {
 
   getRan = () => {
-    return Math.floor(Math.random() * Math.floor(this.data.length))
+    return Math.floor(Math.random() * Math.floor(this.state.subsetData.length))
   };
 
   data = Data;
@@ -21,46 +52,117 @@ class App extends React.Component<{},{data:JSONResult,val:string,pos:number,ente
   constructor(){
     super();
     this.state = {
-      data: this.data || '',
+      data: this.data || {},
+      subsetData: this.data || {},
+      category:'--',
       val: '',
       pos: 0,
       entered:'',
       actual:'',
-      feedback: '',
+      feedback: undefined,
+      display:"none",
+      score:0,
+      tries:0,
+      english:this.data[0].english
     };
     this.sendAnswer = this.sendAnswer.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.changeCategory = this.changeCategory.bind(this);
+    console.log(this.state.subsetData[this.state.pos])
   }
 
+  //TODO update this type as well
   sendAnswer = (e:any) => {
     e.preventDefault();
-    let ans = (this.state.data[this.state.pos].thai === this.state.val) ? 'Good Job' : 'Bad Job';
+    let tries = this.state.tries + 1
+    let ans = (this.state.subsetData[this.state.pos].thai === this.state.val) ? "success" : "danger";
+    let newScore = 0;
+    if (ans == "success"){
+      newScore = this.state.score+1
+    } else {
+      if (this.state.score > 0) {
+        newScore = this.state.score - 1
+      }
+    }
+    let display = "block"
     let p = this.getRan();
+    console.log(p)
+    console.log(this.state.subsetData[this.state.pos])
     this.setState({
-      actual:this.state.data[this.state.pos].thai,
+      actual:this.state.subsetData[this.state.pos].thai,
       entered:this.state.val,
+      english:this.state.subsetData[this.state.pos].english,
       pos:p,
       val:'',
-      feedback:ans,
+      feedback:ans as Variant,
+      display:display,
+      score:newScore,
+      tries:tries
     });
 
   };
 
-  handleChange = (target:React.FormEvent<HTMLInputElement>) => {
-    this.setState({val:target.currentTarget.value});
+  //TODO update the type to use React.FormEvent<HTMLInputElement>
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16208
+  handleChange = (event:any) => {
+    this.setState({val:event.currentTarget.value});
   };
+
+  changeCategory = (event:any) => {
+    //change the subset here and use it!
+    let subset = [];
+    let selectedCategory = event.currentTarget.value;
+    if (selectedCategory === 'default'){
+      this.setState({subsetData:this.state.data}, ()=> {
+        let p = this.getRan();
+        this.setState({
+          pos:p,
+          english:this.state.subsetData[p].english,
+          category:selectedCategory,
+        })
+        console.log(p)
+        console.log(this.state.subsetData)
+      })
+      return;
+    }
+
+    //TODO change for loop
+    for (let i=0; i < Object.keys(this.state.data).length; i++){
+      console.log(this.state.data[i]);
+      if (selectedCategory === this.state.data[i].category){
+        subset.push(this.state.data[i])
+      }
+    }
+    this.setState({category:event.currentTarget.value})
+    this.setState({subsetData:subset},() => {
+      let p = this.getRan();
+      this.setState({pos:p});
+      this.setState({english:this.state.subsetData[p].english})
+      console.log(p)
+      console.log(this.state.subsetData)
+    });
+  }
 
   render() {
     return (
-      <div id="form-wrapper">
-        <form onSubmit={this.sendAnswer}>
-          <h1>{this.state.feedback}</h1>
-          <h1>You entered: {this.state.entered} and answer was {this.state.actual}</h1>
-          <h1>New word: {this.state.data[this.state.pos].english}</h1>
-          <input type="text" name="val" onChange={this.handleChange} value={this.state.val}></input>
-        </form>
-        <button type="submit">Submit</button>
-      </div>
+
+        <Form onSubmit={this.sendAnswer} style={{maxWidth:'500px'}}>
+          <h3>New word: {this.state.english}</h3>
+          <Form.Group controlId="exampleForm.ControlSelect1">
+            <Form.Label>Category</Form.Label>
+            <Form.Control as="select" onChange={this.changeCategory} value={this.state.category}>
+              <option value="default">All</option>
+              <option value="general">General</option>
+              <option value="dining">Dining</option>
+              <option value="location">Location</option>
+              <option value="object">Object</option>
+            </Form.Control>
+          </Form.Group>
+          <FormControl type="text" name="val" onChange={this.handleChange} value={this.state.val} />
+          <Alert style={{display: this.state.display}}  variant={this.state.feedback}><FormText>You entered: {this.state.entered} and answer was {this.state.actual}</FormText></Alert>
+          <Button variant="primary" type="submit">Submit</Button>
+          <Alert style={{float:"right"}} variant="info">Score: {this.state.score} / {this.state.tries}</Alert>
+        </Form>
     );
   }
 }

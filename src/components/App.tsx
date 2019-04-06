@@ -1,7 +1,7 @@
 import '../App.css';
 //import * as Data from './phrases.json'
 import {Data} from '../data/phrases.js'
-import * as React from 'react'
+import React, {useState} from 'react'
 import {JSONResult} from "csvtojson/v2/lineToJson";
 import {
   Form,
@@ -49,9 +49,7 @@ class App extends React.Component<{},IState> {
 
   data = Data;
 
-  constructor(){
-    super();
-    this.state = {
+  state = {
       data: this.data || {},
       subsetData: this.data || {},
       category:'--',
@@ -64,11 +62,6 @@ class App extends React.Component<{},IState> {
       score:0,
       tries:0,
       english:this.data[0].english
-    };
-    this.sendAnswer = this.sendAnswer.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.changeCategory = this.changeCategory.bind(this);
-    console.log(this.state.subsetData[this.state.pos])
   }
 
   //TODO update this type as well

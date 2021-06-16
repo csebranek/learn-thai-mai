@@ -1,6 +1,4 @@
 export const Data =
-
-
   [
     {
       "english": "I",
@@ -189,7 +187,7 @@ export const Data =
       "category": "location"
     },
     {
-      "english": "is/are",
+      "english": "is:are",
       "thai": "อยู่",
       "weak": 1,
       "category": "location"
@@ -351,9 +349,10 @@ export const Data =
       "category": "dining"
     },
     {
-      "english": "recepit",
+      "english": "receipt",
       "thai": "ใบเสร็จ",
       "weak": 1,
       "category": "dining"
     }
   ]
+

@@ -203,6 +203,7 @@ console.log(subsetData[p].english);
               <option value="dining">Dining</option>
               <option value="location">Location</option>
               <option value="object">Object</option>
+              <option value="phrases">Phrases</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect2">

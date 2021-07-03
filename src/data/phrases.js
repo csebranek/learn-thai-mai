@@ -353,6 +353,37 @@ export const Data =
       "thai": "ใบเสร็จ",
       "weak": 1,
       "category": "dining"
-    }
+    },
+    {
+      "english": "what's up?",
+      "thai": "ว่าไง",
+      "weak": 1,
+      "category": "phrases"
+    },
+    {
+      "english": "is it beautiful?",
+      "thai": "สวยมั้ย",
+      "weak": 1,
+      "category": "phrases"
+    },
+    {
+      "english": "where are you going?",
+      "thai": "ไปไหนอ่ะ",
+      "weak": 1,
+      "category": "phrases"
+    },
+    {
+      "english": "where is it?",
+      "thai": "อยู่ไหนอ่ะ",
+      "weak": 1,
+      "category": "phrases"
+    },
+    {
+      "english": "what shall we eat?",
+      "thai": "อยากกินอะไร",
+      "weak": 1,
+      "category": "phrases"
+    },
+
   ]
 

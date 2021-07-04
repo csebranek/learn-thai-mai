@@ -122,17 +122,18 @@ export const App:FunctionComponent<IState> = () => {
   };
 
   const loadAndPlay = () => {
-    let aud = new Audio(soundPath);
-    aud.play();
-    let Http = new XMLHttpRequest();
-    let url= soundPath;
-    Http.open("GET", url);
-    Http.send();
-    Http.onreadystatechange = (e) => {
-      if (Http.readyState === XMLHttpRequest.DONE && Http.status == 404) {
-        alert('sound not found')
+    let url = soundPath;
+    fetch(url)
+    .then(response => {
+      if (response.status === 200) {
+        let aud = new Audio(soundPath);
+        aud.play();
+      }else if (response.status === 404) {
+        alert('Sound clip for this word not found!');
+      } else {
+        alert(response.statusText);
       }
-    }
+    });
   }
 
   //do this then set other things

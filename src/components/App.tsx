@@ -74,6 +74,12 @@ export const App:FunctionComponent<IState> = () => {
   };
 
 
+  const getSoundPath = (soundsPath:string, newSound:string) => {
+    //remove question marks from word, not allowed in filenames
+    newSound = newSound.replace(/[?]/g,'');
+    let soundPath = soundsPath + newSound + '.m4a';
+    return soundPath;
+  }
 
   //TODO update this type as well
   const sendAnswer = (e:any) => {
@@ -105,7 +111,7 @@ export const App:FunctionComponent<IState> = () => {
     }
     setFeedback(ans);
     setDisplay(display);
-    setSoundPath(soundsPath + subsetData[p].english + '.m4a');
+    setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
 
   };
 
@@ -135,7 +141,7 @@ export const App:FunctionComponent<IState> = () => {
     setPos(p);
     setEnglish(subsetData[p].english)
     setCurrentWord(subsetData[p].english)
-    setSoundPath(soundsPath + subsetData[p].english + '.m4a');
+    setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
   },[subsetData]);
 
   const changeCategory = (event:any) => {
@@ -148,7 +154,7 @@ export const App:FunctionComponent<IState> = () => {
       setPos(p);
       setEnglish(subsetData[pos].english);
       setCategory(selectedCategory);
-      setSoundPath(soundsPath + subsetData[p].english + '.m4a');
+      setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
       return;
     }
 
@@ -163,7 +169,7 @@ export const App:FunctionComponent<IState> = () => {
     setSubsetData(subset)
     let p = getRan();
     setCategory(selectedCategory);
-    setSoundPath(soundsPath + subsetData[p].english + '.m4a');
+    setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
   }
   const changeMode = (event:any) => {
     let selectedMode = event.currentTarget.value;

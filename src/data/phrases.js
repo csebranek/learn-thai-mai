@@ -361,7 +361,7 @@ export const Data =
       "category": "phrases"
     },
     {
-      "english": "is it beautiful?",
+      "english": "it is beautiful, right?",
       "thai": "สวยมั้ย",
       "weak": 1,
       "category": "phrases"

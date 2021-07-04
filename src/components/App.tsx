@@ -1,5 +1,4 @@
 import '../App.css';
-//import * as Data from './phrases.json'
 import {Data} from '../data/phrases.js'
 import React, {FunctionComponent, useEffect, useState, useRef} from 'react'
 import {JSONResult} from "csvtojson/v2/lineToJson";
@@ -17,7 +16,6 @@ import {
   Alert,
   Dropdown
 } from 'react-bootstrap';
-import Player from "./Player";
 
 interface ISomeObject{
   english?:string;
@@ -219,7 +217,7 @@ console.log(subsetData[p].english);
 	  <Alert style={{display: display}}  variant={ans}>You entered: <strong>{displayAnswer}</strong> and answer was:  <strong>{answer} ({previousWord})</strong></Alert>
           }
 	  <div style={{float: "right", cursor: "pointer"}}>
-	      <img onClick={loadAndPlay} alt="Play answer" src="https://img.icons8.com/color/48/000000/high-volume--v2.png"/>
+	      <img width="32px" onClick={loadAndPlay} alt="Play answer" src={speakerIcon}/>
 	  </div>
           <Button variant="primary" type="submit">Submit</Button>
         </Form>

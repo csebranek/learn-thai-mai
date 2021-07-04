@@ -1,4 +1,3 @@
-import '../App.css';
 import {Data} from '../data/phrases.js'
 import React, {FunctionComponent, useEffect, useState, useRef} from 'react'
 import {JSONResult} from "csvtojson/v2/lineToJson";
@@ -43,16 +42,6 @@ export type Variant = "success" | "danger" | "warning" | undefined
 const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
 const speakerIcon = process.env.PUBLIC_URL + '/assets/images/speaker.png';
 
-
-/*const usePreviousValue = value => {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-    console.log('updating prev val');
-    console.log(value);
-  });
-  return ref.current;
-};*/
 
 //TODO set initial state in () below.
 export const App:FunctionComponent<IState> = () => {
@@ -104,8 +93,6 @@ export const App:FunctionComponent<IState> = () => {
     setAns(ans as Variant);
     let display = "block"
     let p = getRan();
-    console.log(p)
-    console.log(subsetData[pos])
 
     setPos(p);
     setActual(subsetData[p].thai);
@@ -118,8 +105,6 @@ export const App:FunctionComponent<IState> = () => {
     }
     setFeedback(ans);
     setDisplay(display);
-console.log(soundsPath);
-console.log(subsetData[p].english);
     setSoundPath(soundsPath + subsetData[p].english + '.m4a');
 
   };
@@ -133,14 +118,19 @@ console.log(subsetData[p].english);
   const loadAndPlay = () => {
     let aud = new Audio(soundPath);
     aud.play();
+    let Http = new XMLHttpRequest();
+    let url= soundPath;
+    Http.open("GET", url);
+    Http.send();
+    Http.onreadystatechange = (e) => {
+      if (Http.readyState === XMLHttpRequest.DONE && Http.status == 404) {
+        alert('sound not found')
+      }
+    }
   }
 
   //do this then set other things
   useEffect(() => {
-    console.log(soundPath);
-  }, [soundPath]);
-  useEffect(() => {
-    console.log('using effect');
     let p = getRan();
     setPos(p);
     setEnglish(subsetData[p].english)
@@ -164,24 +154,15 @@ console.log(subsetData[p].english);
 
     //TODO change for loop and make async using useEffect hook
     for (let i=0; i < Object.keys(data).length; i++){
-      console.log('calculating subset...')
       if (selectedCategory === data[i].category){
         subset.push(data[i])
       }
     }
 
     setCategory(selectedCategory);
-    console.log(selectedCategory);
-    console.log('setting subset...');
     setSubsetData(subset)
-    console.log(subsetData)
-    console.log('subset set...');
     let p = getRan();
     setCategory(selectedCategory);
-    console.log('english...',english)
-    console.log(soundsPath)
-    console.log(p)
-    console.log(subsetData)
     setSoundPath(soundsPath + subsetData[p].english + '.m4a');
   }
   const changeMode = (event:any) => {
@@ -190,8 +171,8 @@ console.log(subsetData[p].english);
   }
 
     return (
-
-        <Form onSubmit={sendAnswer} style={{maxWidth:'500px'}}>
+      <div id="container">
+        <Form onSubmit={sendAnswer}>
           <h3>New word: {currentWord}</h3>
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Category</Form.Label>
@@ -221,6 +202,7 @@ console.log(subsetData[p].english);
 	  </div>
           <Button variant="primary" type="submit">Submit</Button>
         </Form>
+      </div>
     );
 }
 

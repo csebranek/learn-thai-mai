@@ -201,13 +201,15 @@ export const App:FunctionComponent<IState> = () => {
           </Form.Group>
           <Form.Label>Answer</Form.Label>
           <FormControl type="text" name="val" onChange={handleChange} value={entered} required />
-          { displayAnswer &&
-	  <Alert style={{display: display}}  variant={ans}>You entered: <strong>{displayAnswer}</strong> and answer was:  <strong>{answer} ({previousWord})</strong></Alert>
-          }
-	  <div style={{float: "right", cursor: "pointer"}}>
+          <div id="button-container">
+	    <div style={{float: "right", cursor: "pointer"}}>
 	      <img width="32px" onClick={loadAndPlay} alt="Play answer" src={speakerIcon}/>
-	  </div>
-          <Button variant="primary" type="submit">Submit</Button>
+	    </div>
+            <Button variant="primary" type="submit">Submit</Button>
+          </div>
+          { displayAnswer &&
+	    <Alert style={{display: display}}  variant={ans}>You entered: <strong>{displayAnswer}</strong> and answer was:  <strong>{answer} ({previousWord})</strong></Alert>
+          }
         </Form>
       </div>
     );

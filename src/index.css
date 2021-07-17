@@ -39,3 +39,7 @@ form button {
   max-width: 500px;
   margin: 0 auto;
 }
+
+#button-container {
+  margin-bottom: 10px;
+}

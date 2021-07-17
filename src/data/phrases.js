@@ -154,7 +154,7 @@ export const Data =
       "english": "do not understand",
       "thai": "ไม่เข้าใจ",
       "weak": 0,
-      "category": "general"
+      "category": "phrases"
     },
     {
       "english": "understand",

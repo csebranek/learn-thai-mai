@@ -1,0 +1,555 @@
+[
+  {
+    "english": "I",
+    "thai": "ฉัน",
+    "weak": 0,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "want",
+    "thai": "อยาก",
+    "weak": 1,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to drink",
+    "thai": "ดื่ม",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to take",
+    "thai": "เอา",
+    "weak": 0,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "hot",
+    "thai": "ร้อน",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "cold",
+    "thai": "หนาว|เย้น",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "small",
+    "thai": "เล็ก",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "medium",
+    "thai": "กลาง",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "big",
+    "thai": "ใหญ่",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "milk",
+    "thai": "นม",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "sweet",
+    "thai": "หวาน",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "little",
+    "thai": "น้อย",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "beer",
+    "thai": "เบียร์",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "wine",
+    "thai": "ไวน์",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "red wine",
+    "thai": "ไวน์แดง",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "order",
+    "thai": "สั่ง",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to come in",
+    "thai": "เข้า",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to sit",
+    "thai": "นั่ง",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "salty",
+    "thai": "เค็ม",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "sour",
+    "thai": "เปรี้ยว",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "bitter",
+    "thai": "ขม",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "spicy",
+    "thai": "เผ็ด",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "delicious",
+    "thai": "อร่อย",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "sugar",
+    "thai": "น้ำตาล",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "salt",
+    "thai": "เกลือ",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "do not understand",
+    "thai": "ไม่เข้าใจ",
+    "weak": 0,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "understand",
+    "thai": "เข้าใจ",
+    "weak": 0,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "here",
+    "thai": "ที่นี่",
+    "weak": 0,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "there",
+    "thai": "ที่นั่น",
+    "weak": 0,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "over there",
+    "thai": "ที่โน่น",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "on",
+    "thai": "บน",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "is:are",
+    "thai": "อยู่",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "in",
+    "thai": "ใน",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "out",
+    "thai": "นอก",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "have",
+    "thai": "มี",
+    "weak": 0,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "do not have",
+    "thai": "ไม่มี",
+    "weak": 1,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "teacher",
+    "thai": "ครู",
+    "weak": 0,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "school",
+    "thai": "โรงเรียน",
+    "weak": 1,
+    "category": "general",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "chair",
+    "thai": "เก้าอี้",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "table",
+    "thai": "โต๊ะ",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "toilet",
+    "thai": "ห้องน้ำ",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "under",
+    "thai": "ใต้",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "room",
+    "thai": "ห้อง",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "between",
+    "thai": "ระหว่าง",
+    "weak": 0,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "pen",
+    "thai": "ปากกา",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "outside",
+    "thai": "ข้างนอก",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "inside",
+    "thai": "ข้งใน",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "at",
+    "thai": "ที่",
+    "weak": 0,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "book store",
+    "thai": "ร้านหนังสือ",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "near",
+    "thai": "ใกล้",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "far",
+    "thai": "ใกล",
+    "weak": 1,
+    "category": "location",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to wait",
+    "thai": "รอ",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to be hungry",
+    "thai": "หิว",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to be full",
+    "thai": "อิ่ม",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "credit card",
+    "thai": "บัตรเครดิต",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to recommend",
+    "thai": "เเนะนำ",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "to bring",
+    "thai": "เอา...นาให้",
+    "weak": 0,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "bill",
+    "thai": "บิล",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "receipt",
+    "thai": "ใบเสร็จ",
+    "weak": 1,
+    "category": "dining",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "what's up?",
+    "thai": "ว่าไง",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "it is beautiful, right?",
+    "thai": "สวยมั้ย",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "where are you going?",
+    "thai": "ไปไหนอ่ะ",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "where is it?",
+    "thai": "อยู่ไหนอ่ะ",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "what shall we eat?",
+    "thai": "อยากกินอะไร",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "what are you doing?",
+    "thai": "ทำอะไร",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "when to go?",
+    "thai": "ไปเมื่อไหร่",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "happy mother's day",
+    "thai": "สุขสันต์วันแม่",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "last night, did you sleep well?",
+    "thai": "เมื่อคืน หลับสบายไหม",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "today, how are you doing?",
+    "thai": "วันนี้เป็นไงบ้าง",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "do you wanna grab a bite to eat?",
+    "thai": "ไปหาอะไรกินกันไหม",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "where should we go?",
+    "thai": "ไปไหนดี",
+    "weak": 1,
+    "category": "phrases",
+    "generate_sound_clip": false
+  },
+  {
+    "english": "pink",
+    "thai": "สีชมพู",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "blue",
+    "thai": "สีฟ้า",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "black",
+    "thai": "สีดำ",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "green",
+    "thai": "สีเขียว",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "white",
+    "thai": "สีขาว",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "red",
+    "thai": "สีแดง",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "yellow",
+    "thai": "สีเหลือง",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "orange",
+    "thai": "สีส้ม",
+    "weak": 1,
+    "category": "colors",
+    "generate_sound_clip": true
+  }
+]

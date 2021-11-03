@@ -1,4 +1,5 @@
-import {Data} from '../data/phrases.js'
+//import {Data} from '../data/phrases.js'
+import Data from '../data/phrases.json'
 import React, {FunctionComponent, useEffect, useState, useRef} from 'react'
 import {JSONResult} from "csvtojson/v2/lineToJson";
 
@@ -41,6 +42,7 @@ interface IState {
 export type Variant = "success" | "danger" | "warning" | undefined
 const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
 const speakerIcon = process.env.PUBLIC_URL + '/assets/images/speaker.png';
+const botanicalImg = process.env.PUBLIC_URL + '/assets/images/botanical.JPG';
 
 
 //TODO set initial state in () below.
@@ -178,9 +180,10 @@ export const App:FunctionComponent<IState> = () => {
   }
 
     return (
+      <>
       <div id="container">
         <Form onSubmit={sendAnswer}>
-          <h3>New word: {currentWord}</h3>
+          <h3>Translate: {currentWord}</h3>
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Category</Form.Label>
             <Form.Control as="select" onChange={changeCategory} value={category}>
@@ -190,6 +193,7 @@ export const App:FunctionComponent<IState> = () => {
               <option value="location">Location</option>
               <option value="object">Object</option>
               <option value="phrases">Phrases</option>
+              <option value="colors">Colors</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect2">
@@ -212,6 +216,10 @@ export const App:FunctionComponent<IState> = () => {
           }
         </Form>
       </div>
+      <div id="container-bottom">
+        <img src={botanicalImg} width="100%"/>
+      </div>
+      </>
     );
 }
 

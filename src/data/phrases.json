@@ -287,6 +287,20 @@
     "generate_sound_clip": false
   },
   {
+    "english": "bottle",
+    "thai": "ขวด",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "baby bottle",
+    "thai": "ขวดนม",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": true
+  },
+  {
     "english": "under",
     "thai": "ใต้",
     "weak": 1,
@@ -550,6 +564,62 @@
     "thai": "สีส้ม",
     "weak": 1,
     "category": "colors",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "bird",
+    "thai": "นก",
+    "weak": 1,
+    "category": "animals",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "squirrel",
+    "thai": "กระรอก",
+    "weak": 1,
+    "category": "animals",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "bear",
+    "thai": "หมี",
+    "weak": 1,
+    "category": "animals",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "duck",
+    "thai": "เป็ด",
+    "weak": 1,
+    "category": "animals",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "dog",
+    "thai": "หมา",
+    "weak": 1,
+    "category": "animals",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "cat",
+    "thai": "แมว",
+    "weak": 1,
+    "category": "animals",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "spoon",
+    "thai": "ช้อน",
+    "weak": 1,
+    "category": "object",
+    "generate_sound_clip": true
+  },
+  {
+    "english": "fork",
+    "thai": "ส้อม",
+    "weak": 1,
+    "category": "object",
     "generate_sound_clip": true
   }
 ]

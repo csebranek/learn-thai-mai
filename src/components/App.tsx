@@ -194,6 +194,7 @@ export const App:FunctionComponent<IState> = () => {
               <option value="object">Object</option>
               <option value="phrases">Phrases</option>
               <option value="colors">Colors</option>
+              <option value="animals">Animals</option>
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="exampleForm.ControlSelect2">

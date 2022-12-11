@@ -621,5 +621,12 @@
     "weak": 1,
     "category": "object",
     "generate_sound_clip": true
+  },
+  {
+    "english": "sleep",
+    "thai": "นอน",
+    "weak": 1,
+    "category": "general",
+    "generate_sound_clip": true
   }
 ]

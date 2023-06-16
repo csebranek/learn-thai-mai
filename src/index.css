@@ -27,6 +27,7 @@ code {
 }
 
 form {
+  min-height: 610px;
   min-width: 463px;
   padding:2rem;
   border: .2rem solid #ececec;

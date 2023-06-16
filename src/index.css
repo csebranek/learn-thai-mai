@@ -6,6 +6,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('/thai/assets/images/botanical.JPG');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: beige;
 }
 
 
@@ -14,10 +18,20 @@ code {
     monospace;
 }
 
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
 form {
+  min-width: 463px;
   padding:2rem;
   border: .2rem solid #ececec;
   border-radius: 8px;
+  background-color: beige;
   
 }
 
@@ -31,15 +45,20 @@ form input {
 
 .form-control {
   height:calc(3.25rem + 2px) !important;
+  width: 75% !important;
+}
+
+#the-input {
+  width: 100% !important;
+  height:calc(3.25rem + 2px) !important;
 }
 
 form button {
   padding: .75rem 1.25rem;
 }
 
-#container {
-  max-width: 500px;
-  margin: 0 auto;
+#word-to-translate {
+  font-style: italic;
 }
 
 #button-container {

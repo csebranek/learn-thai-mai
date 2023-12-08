@@ -2,6 +2,7 @@
   "name": "learn-thai-mai",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://chadsebranek.com/thai/",
   "dependencies": {
     "@types/react": "^16.8.12",
     "@types/react-bootstrap": "^0.32.17",

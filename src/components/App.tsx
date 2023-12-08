@@ -42,7 +42,6 @@ interface IState {
 export type Variant = "success" | "danger" | "warning" | undefined
 const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
 const speakerIcon = process.env.PUBLIC_URL + '/assets/images/speaker.png';
-const botanicalImg = process.env.PUBLIC_URL + '/assets/images/botanical.JPG';
 
 
 //TODO set initial state in () below.
@@ -183,7 +182,21 @@ export const App:FunctionComponent<IState> = () => {
       <>
       <div id="container">
         <Form onSubmit={sendAnswer}>
-          <h3>Translate: {currentWord}</h3>
+          <h3>Translate:</h3>
+          <h4 id="word-to-translate">{currentWord}</h4>
+          <Form.Label>Answer</Form.Label>
+          <FormControl type="text" name="val" onChange={handleChange}
+          value={entered} required id="the-input" />
+          <div id="button-container">
+	    <div style={{float: "right", cursor: "pointer"}}>
+	      <img width="32px" onClick={loadAndPlay} alt="Play answer" src={speakerIcon}/>
+	    </div>
+            <Button variant="primary" type="submit">Submit</Button>
+          </div>
+          { displayAnswer &&
+	    <Alert style={{display: display}}  variant={ans}><em>{previousWord}</em> <br/> You entered: 
+      <strong>  {displayAnswer}</strong> <br/> Answer was:  <strong>{answer} </strong></Alert>
+          }
           <Form.Group controlId="exampleForm.ControlSelect1">
             <Form.Label>Category</Form.Label>
             <Form.Control as="select" onChange={changeCategory} value={category}>
@@ -204,21 +217,7 @@ export const App:FunctionComponent<IState> = () => {
               <option value="thai-to-english">ไทย to English</option>
             </Form.Control>
           </Form.Group>
-          <Form.Label>Answer</Form.Label>
-          <FormControl type="text" name="val" onChange={handleChange} value={entered} required />
-          <div id="button-container">
-	    <div style={{float: "right", cursor: "pointer"}}>
-	      <img width="32px" onClick={loadAndPlay} alt="Play answer" src={speakerIcon}/>
-	    </div>
-            <Button variant="primary" type="submit">Submit</Button>
-          </div>
-          { displayAnswer &&
-	    <Alert style={{display: display}}  variant={ans}>You entered: <strong>{displayAnswer}</strong> and answer was:  <strong>{answer} ({previousWord})</strong></Alert>
-          }
         </Form>
-      </div>
-      <div id="container-bottom">
-        <img src={botanicalImg} width="100%"/>
       </div>
       </>
     );

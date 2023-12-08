@@ -10,7 +10,6 @@ def synthesize_text(thai, english, sound_clip_path):
     # Names of voices can be retrieved with client.list_voices().
     voice = texttospeech.VoiceSelectionParams(
         language_code="th-TH",
-        name="th-TH-Standard-C",
         ssml_gender=texttospeech.SsmlVoiceGender.FEMALE,
     )
 

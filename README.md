@@ -1,4 +1,4 @@
-[https://chadsebranek.com/thai](chadsebranek.com/thai)
+[chadsebranek.com/thai](https://chadsebranek.com/thai)
 
 To build and deploy:
 

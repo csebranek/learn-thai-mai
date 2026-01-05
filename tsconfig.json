@@ -24,9 +24,6 @@
   "exclude": [
     "./node_modules"
   ],
-  "files": [
-    "src/App.tsx"
-  ],
   "include": [
     "src"
   ]

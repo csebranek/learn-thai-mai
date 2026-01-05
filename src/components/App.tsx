@@ -1,74 +1,42 @@
-//import {Data} from '../data/phrases.js'
 import Data from '../data/phrases.json'
-import React, {FunctionComponent, useEffect, useState, useRef} from 'react'
-import {JSONResult} from "csvtojson/v2/lineToJson";
-
-import {
-  Form,
-  Row,
-  Container,
-  Col,
-  FormControl,
-  FormLabel,
-  FormText,
-  FormGroup,
-  Button,
-  Alert,
-  Dropdown
-} from 'react-bootstrap';
-
-interface ISomeObject{
-  english?:string;
-  thai?:string;
-  data:JSON;
-  subsetData:JSON;
-}
-
-interface IState {
-  data:JSONResult;
-  subsetData:JSONResult;
-  category:string;
-  val:string;
-  pos:number;
-  entered:string;
-  actual:string;
-  feedback:Variant;
-  display:string;
-  score:number;
-  tries:number;
-  english:string;
-}
+import React, {FunctionComponent, useEffect, useState} from 'react'
 
 export type Variant = "success" | "danger" | "warning" | undefined
+
+interface IAppProps {
+  data?: any;
+  subsetData?: any;
+  mode?: string;
+  category?: string;
+}
+
 const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
-const speakerIcon = process.env.PUBLIC_URL + '/assets/images/speaker.png';
 
 
 //TODO set initial state in () below.
-export const App:FunctionComponent<IState> = () => {
-
+export const App:FunctionComponent<IAppProps> = (props) => {
+  const initialSubsetData = props.subsetData || Data;
+  const initialMode = props.mode || 'english-to-thai';
 
   const [entered, setEntered] = useState('');
-  const [displayAnswer, setDisplayAnswer] = useState();
-  const [data] = useState(Data);
-  const [subsetData, setSubsetData] = useState(Data);
+  const [displayAnswer, setDisplayAnswer] = useState('');
+  const [subsetData, setSubsetData] = useState(initialSubsetData);
   const [pos, setPos] = useState(0);
-  const [actual, setActual] = useState(Data[0].thai);//used for next answer
-  const [answer, setAnswer] = useState(Data[0].thai)
-
-  const [english, setEnglish] = useState(Data[0].english);
-  const [thai, setThai] = useState(Data[0].thai);
-  const [feedback, setFeedback] = useState("");
-  const [currentWord, setCurrentWord] = useState(Data[0].english);
+  const [answer, setAnswer] = useState(initialSubsetData[0]?.thai || '');
+  const [currentWord, setCurrentWord] = useState(initialSubsetData[0]?.[initialMode === 'english-to-thai' ? 'english' : 'thai'] || '');
   const [previousWord, setPreviousWord] = useState('');
 
   const [tries, setTries] = useState(0);
-  const [display, setDisplay] = useState('block');
   const [ans, setAns] = useState("warning" as Variant);
-
-  const [category, setCategory] = useState('default');
-  const [mode, setMode] = useState('english-to-thai');
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [shakeAnswer, setShakeAnswer] = useState(false);
+  const [bloomAnswer, setBloomAnswer] = useState(false);
   const [soundPath, setSoundPath] = useState<string>('../assets/sounds/beer.m4a')
+
+  // Update subsetData when props change
+  useEffect(() => {
+    setSubsetData(initialSubsetData);
+  }, [initialSubsetData]);
 
   const getRan = () => {
     return Math.floor(Math.random() * Math.floor(subsetData.length))
@@ -82,13 +50,13 @@ export const App:FunctionComponent<IState> = () => {
     return soundPath;
   }
 
-  //TODO update this type as well
-  const sendAnswer = (e:any) => {
+  const sendAnswer = (e: any) => {
     e.preventDefault();
-    setTries(tries+1);
+    setTries(tries + 1);
     setDisplayAnswer(entered);
     let ans = "";
-    if (mode == 'english-to-thai') {
+    
+    if (initialMode === 'english-to-thai') {
       setAnswer(subsetData[pos].thai);
       setPreviousWord(subsetData[pos].english);
       ans = (subsetData[pos].thai === entered) ? "success" : "danger";
@@ -97,23 +65,28 @@ export const App:FunctionComponent<IState> = () => {
       setPreviousWord(subsetData[pos].thai);
       ans = (subsetData[pos].english === entered) ? "success" : "danger";
     }
+    
     setAns(ans as Variant);
-    let display = "block"
-    let p = getRan();
+    setShowFeedback(true);
 
-    setPos(p);
-    setActual(subsetData[p].thai);
-    setEnglish(subsetData[p].english);
-    setThai(subsetData[p].thai);
-    if (mode == 'english-to-thai') {
-      setCurrentWord(subsetData[p].english)
+    if (ans === "success") {
+      setBloomAnswer(true);
+      setTimeout(() => setBloomAnswer(false), 600);
     } else {
-      setCurrentWord(subsetData[p].thai)
+      setShakeAnswer(true);
+      setTimeout(() => setShakeAnswer(false), 600);
     }
-    setFeedback(ans);
-    setDisplay(display);
-    setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
+  };
 
+  const goToNextWord = () => {
+    let p = getRan();
+    setPos(p);
+    setCurrentWord(subsetData[p][initialMode === 'english-to-thai' ? 'english' : 'thai']);
+    setSoundPath(getSoundPath(soundsPath, subsetData[p].english));
+    setEntered('');
+    setDisplayAnswer('');
+    setShowFeedback(false);
+    setTries(0);
   };
 
   //TODO update the type to use React.FormEvent<HTMLInputElement>
@@ -139,87 +112,136 @@ export const App:FunctionComponent<IState> = () => {
 
   //do this then set other things
   useEffect(() => {
-    let p = getRan();
-    setPos(p);
-    setEnglish(subsetData[p].english)
-    setCurrentWord(subsetData[p].english)
-    setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
-  },[subsetData]);
-
-  const changeCategory = (event:any) => {
-    //change the subset here and use it!
-    let subset: any = [];
-    let selectedCategory = event.currentTarget.value;
-    if (selectedCategory === 'default'){
-      setSubsetData(data)
+    if (subsetData.length > 0) {
       let p = getRan();
       setPos(p);
-      setEnglish(subsetData[pos].english);
-      setCategory(selectedCategory);
-      setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
-      return;
+      setCurrentWord(subsetData[p][initialMode === 'english-to-thai' ? 'english' : 'thai'])
+      setSoundPath(getSoundPath(soundsPath, subsetData[p].english));
     }
-
-    //TODO change for loop and make async using useEffect hook
-    for (let i=0; i < Object.keys(data).length; i++){
-      if (selectedCategory === data[i].category){
-        subset.push(data[i])
-      }
-    }
-
-    setCategory(selectedCategory);
-    setSubsetData(subset)
-    let p = getRan();
-    setCategory(selectedCategory);
-    setSoundPath(getSoundPath(soundsPath,subsetData[p].english));
-  }
-  const changeMode = (event:any) => {
-    let selectedMode = event.currentTarget.value;
-    setMode(selectedMode);
-  }
+  }, [subsetData, initialMode]);
 
     return (
-      <>
-      <div id="container">
-        <Form onSubmit={sendAnswer}>
-          <h3>Translate:</h3>
-          <h4 id="word-to-translate">{currentWord}</h4>
-          <Form.Label>Answer</Form.Label>
-          <FormControl type="text" name="val" onChange={handleChange}
-          value={entered} required id="the-input" />
-          <div id="button-container">
-	    <div style={{float: "right", cursor: "pointer"}}>
-	      <img width="32px" onClick={loadAndPlay} alt="Play answer" src={speakerIcon}/>
-	    </div>
-            <Button variant="primary" type="submit">Submit</Button>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          {/* Main Card */}
+          <div className="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-6 border border-white/20">
+            
+            {/* Header */}
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold text-gray-800 mb-1">Learn Thai</h2>
+              <p className="text-gray-500 text-sm">Translate and master Thai vocabulary</p>
+            </div>
+
+            {/* Word to Translate Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 mb-5 border border-blue-200">
+              <p className="text-gray-600 text-xs font-semibold mb-2 uppercase tracking-wide">Translate this word:</p>
+              <h3 className="text-4xl font-bold text-blue-600">{currentWord}</h3>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={sendAnswer} className="space-y-4">
+              
+              {/* Answer Input */}
+              <div>
+                <label htmlFor="answer-input" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Your Answer
+                </label>
+                <input
+                  id="answer-input"
+                  type="text"
+                  value={entered}
+                  onChange={handleChange}
+                  placeholder="Type your answer here..."
+                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none ${
+                    shakeAnswer 
+                      ? 'border-red-400 animate-shake' 
+                      : bloomAnswer 
+                      ? 'border-green-400 animate-bloom' 
+                      : 'border-gray-300 focus:border-blue-500'
+                  }`}
+                  autoFocus
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl text-sm"
+              >
+                Check Answer
+              </button>
+
+              {/* Next Word Button - Only show after feedback */}
+              {showFeedback && (
+                <button
+                  type="button"
+                  onClick={goToNextWord}
+                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl animate-bounce_in text-sm"
+                >
+                  Next Word →
+                </button>
+              )}
+
+              {/* Feedback Alert */}
+              {showFeedback && (
+                <div
+                  className={`p-3 rounded-lg border-l-4 animate-bounce_in text-sm ${
+                    ans === 'success'
+                      ? 'bg-green-50 border-green-500 text-green-800'
+                      : 'bg-red-50 border-red-500 text-red-800'
+                  }`}
+                >
+                  <div className="flex items-start gap-2">
+                    <div className="flex-shrink-0 text-lg">
+                      {ans === 'success' ? '✓' : '✗'}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold mb-1">
+                        {ans === 'success' ? 'Excellent! 🎉' : 'Not quite right'}
+                      </p>
+                      <p className="text-xs opacity-90 mb-1">
+                        <span className="font-semibold">{previousWord}</span> means:
+                      </p>
+                      <p className="font-bold mb-1">{answer}</p>
+                      {ans !== 'success' && (
+                        <p className="text-xs opacity-90">
+                          You entered: <span className="font-semibold">{displayAnswer}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Sound Button */}
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={loadAndPlay}
+                  className="inline-flex items-center gap-2 bg-purple-100 hover:bg-purple-200 text-purple-700 font-semibold py-2 px-3 rounded-lg transition-all duration-200 hover:scale-110 text-sm"
+                  title="Play pronunciation"
+                >
+                  <span className="text-lg">🔊</span>
+                  Play Sound
+                </button>
+              </div>
+            </form>
+
+            {/* Stats Footer & Settings Link */}
+            <div className="mt-6 pt-4 border-t border-gray-200 flex items-center justify-between">
+              <div className="text-xs text-gray-600">
+                <span>Attempts: <span className="font-semibold text-gray-800">{tries}</span></span>
+              </div>
+              <a
+                href="/thai/options"
+                className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition-colors"
+              >
+                ⚙️ Settings
+              </a>
+            </div>
           </div>
-          { displayAnswer &&
-	    <Alert style={{display: display}}  variant={ans}><em>{previousWord}</em> <br/> You entered: 
-      <strong>  {displayAnswer}</strong> <br/> Answer was:  <strong>{answer} </strong></Alert>
-          }
-          <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label>Category</Form.Label>
-            <Form.Control as="select" onChange={changeCategory} value={category}>
-              <option value="default">All</option>
-              <option value="general">General</option>
-              <option value="dining">Dining</option>
-              <option value="location">Location</option>
-              <option value="object">Object</option>
-              <option value="phrases">Phrases</option>
-              <option value="colors">Colors</option>
-              <option value="animals">Animals</option>
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlSelect2">
-            <Form.Label>Mode</Form.Label>
-            <Form.Control as="select" onChange={changeMode} value={mode}>
-              <option value="english-to-thai">English to ไทย</option>
-              <option value="thai-to-english">ไทย to English</option>
-            </Form.Control>
-          </Form.Group>
-        </Form>
+        </div>
       </div>
-      </>
     );
 }
 

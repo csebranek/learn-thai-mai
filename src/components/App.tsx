@@ -85,7 +85,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     setSelectedChoice(null);
   };
 
-  const sendAnswer = (e: any) => {
+  const sendAnswer = (e: any, choiceIndexOverride?: number) => {
     e.preventDefault();
     setTries(tries + 1);
     
@@ -93,9 +93,11 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     let ans = "";
     
     if (initialQuizMode === 'easy') {
-      // Multiple choice mode
-      if (selectedChoice === null) return;
-      userAnswer = choices[selectedChoice];
+      // Multiple choice mode - use override if provided (for immediate submission)
+      const choiceIndex = choiceIndexOverride !== undefined ? choiceIndexOverride : selectedChoice;
+      if (choiceIndex === null) return;
+      userAnswer = choices[choiceIndex];
+      setSelectedChoice(choiceIndex);
     } else {
       // Text input mode
       userAnswer = entered;
@@ -125,12 +127,8 @@ export const App:FunctionComponent<IAppProps> = (props) => {
   };
 
   const handleEasyModeChoice = (index: number) => {
-    setSelectedChoice(index);
-    // Create a synthetic event for the form submission
-    const event = new Event('submit', { bubbles: true });
-    setTimeout(() => {
-      sendAnswer({ preventDefault: () => {} } as any);
-    }, 100);
+    // Immediately submit with the chosen index, don't wait for state to update
+    sendAnswer({ preventDefault: () => {} } as any, index);
   };
 
   const goToNextWord = () => {

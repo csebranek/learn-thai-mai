@@ -3,15 +3,19 @@ import React, { FunctionComponent } from 'react'
 interface ISettingsProps {
   category: string;
   mode: string;
+  quizMode: string;
   onCategoryChange: (category: string) => void;
   onModeChange: (mode: string) => void;
+  onQuizModeChange: (quizMode: string) => void;
 }
 
 export const Settings: FunctionComponent<ISettingsProps> = ({
   category,
   mode,
+  quizMode,
   onCategoryChange,
-  onModeChange
+  onModeChange,
+  onQuizModeChange
 }) => {
 
   const handleCategoryChange = (event: any) => {
@@ -22,6 +26,10 @@ export const Settings: FunctionComponent<ISettingsProps> = ({
   const handleModeChange = (event: any) => {
     const selectedMode = event.currentTarget.value;
     onModeChange(selectedMode);
+  }
+
+  const handleQuizModeChange = (selectedQuizMode: string) => {
+    onQuizModeChange(selectedQuizMode);
   }
 
   return (
@@ -74,6 +82,36 @@ export const Settings: FunctionComponent<ISettingsProps> = ({
               <option value="thai-to-english">ไทย → English</option>
             </select>
             <p className="text-xs text-gray-500 mt-2">Choose whether to translate from English or Thai</p>
+          </div>
+
+          {/* Quiz Mode Selector */}
+          <div className="mb-8">
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              ⚡ Quiz Mode
+            </label>
+            <div className="flex gap-3">
+              <button
+                onClick={() => handleQuizModeChange('easy')}
+                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 border-2 ${
+                  quizMode === 'easy'
+                    ? 'bg-green-500 text-white border-green-600 shadow-lg'
+                    : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+                }`}
+              >
+                ✓ Easy (Multiple Choice)
+              </button>
+              <button
+                onClick={() => handleQuizModeChange('hard')}
+                className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 border-2 ${
+                  quizMode === 'hard'
+                    ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
+                    : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+                }`}
+              >
+                ⊙ Hard (Text Input)
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Choose your challenge level</p>
           </div>
 
           {/* Info Section */}

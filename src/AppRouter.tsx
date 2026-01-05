@@ -11,6 +11,9 @@ export const AppRouter: FunctionComponent = () => {
   const [mode, setMode] = useState(() => {
     return localStorage.getItem('thaimode') || 'english-to-thai';
   });
+  const [quizMode, setQuizMode] = useState(() => {
+    return localStorage.getItem('thaiquizmode') || 'easy';
+  });
   const [data] = useState(Data);
   const [subsetData, setSubsetData] = useState(Data);
 
@@ -22,6 +25,10 @@ export const AppRouter: FunctionComponent = () => {
   useEffect(() => {
     localStorage.setItem('thaimode', mode);
   }, [mode]);
+
+  useEffect(() => {
+    localStorage.setItem('thaiquizmode', quizMode);
+  }, [quizMode]);
 
   // Filter data when category changes
   useEffect(() => {
@@ -42,6 +49,10 @@ export const AppRouter: FunctionComponent = () => {
     setMode(selectedMode);
   }
 
+  const handleQuizModeChange = (selectedQuizMode: string) => {
+    setQuizMode(selectedQuizMode);
+  }
+
   return (
     <Router basename="/thai">
       <Routes>
@@ -53,6 +64,7 @@ export const AppRouter: FunctionComponent = () => {
               subsetData={subsetData}
               mode={mode}
               category={category}
+              quizMode={quizMode}
             />
           } 
         />
@@ -62,8 +74,10 @@ export const AppRouter: FunctionComponent = () => {
             <Settings 
               category={category}
               mode={mode}
+              quizMode={quizMode}
               onCategoryChange={handleCategoryChange}
               onModeChange={handleModeChange}
+              onQuizModeChange={handleQuizModeChange}
             />
           } 
         />

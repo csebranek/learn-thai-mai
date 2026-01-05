@@ -8,6 +8,7 @@ interface IAppProps {
   subsetData?: any;
   mode?: string;
   category?: string;
+  quizMode?: string;
 }
 
 const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
@@ -17,6 +18,7 @@ const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
 export const App:FunctionComponent<IAppProps> = (props) => {
   const initialSubsetData = props.subsetData || Data;
   const initialMode = props.mode || 'english-to-thai';
+  const initialQuizMode = props.quizMode || 'easy';
 
   const [entered, setEntered] = useState('');
   const [displayAnswer, setDisplayAnswer] = useState('');
@@ -32,6 +34,8 @@ export const App:FunctionComponent<IAppProps> = (props) => {
   const [shakeAnswer, setShakeAnswer] = useState(false);
   const [bloomAnswer, setBloomAnswer] = useState(false);
   const [soundPath, setSoundPath] = useState<string>('../assets/sounds/beer.m4a')
+  const [choices, setChoices] = useState<any[]>([]);
+  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
 
   // Update subsetData when props change
   useEffect(() => {
@@ -50,20 +54,62 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     return soundPath;
   }
 
+  const generateChoices = (currentIndex: number, correctAnswer: string) => {
+    // Get items from same category (or all if default)
+    let categoryData = subsetData;
+    if (props.category && props.category !== 'default') {
+      categoryData = subsetData.filter((item: any) => item.category === props.category);
+    }
+
+    // Get the correct answer field based on mode
+    const correctAnswerField = initialMode === 'english-to-thai' ? 'thai' : 'english';
+    
+    // Get 3 random wrong answers from same category
+    const wrongAnswers: string[] = [];
+    while (wrongAnswers.length < 3) {
+      const randomIndex = Math.floor(Math.random() * categoryData.length);
+      const randomItem = categoryData[randomIndex];
+      const randomAnswer = randomItem[correctAnswerField];
+      
+      // Make sure it's not the correct answer and not already selected
+      if (randomAnswer !== correctAnswer && !wrongAnswers.includes(randomAnswer)) {
+        wrongAnswers.push(randomAnswer);
+      }
+    }
+
+    // Combine correct and wrong answers, then shuffle
+    const allChoices: string[] = [correctAnswer, ...wrongAnswers];
+    const shuffled = allChoices.sort(() => Math.random() - 0.5);
+    
+    setChoices(shuffled);
+    setSelectedChoice(null);
+  };
+
   const sendAnswer = (e: any) => {
     e.preventDefault();
     setTries(tries + 1);
-    setDisplayAnswer(entered);
+    
+    let userAnswer = '';
     let ans = "";
+    
+    if (initialQuizMode === 'easy') {
+      // Multiple choice mode
+      if (selectedChoice === null) return;
+      userAnswer = choices[selectedChoice];
+    } else {
+      // Text input mode
+      userAnswer = entered;
+      setDisplayAnswer(entered);
+    }
     
     if (initialMode === 'english-to-thai') {
       setAnswer(subsetData[pos].thai);
       setPreviousWord(subsetData[pos].english);
-      ans = (subsetData[pos].thai === entered) ? "success" : "danger";
+      ans = (subsetData[pos].thai === userAnswer) ? "success" : "danger";
     } else {
       setAnswer(subsetData[pos].english);
       setPreviousWord(subsetData[pos].thai);
-      ans = (subsetData[pos].english === entered) ? "success" : "danger";
+      ans = (subsetData[pos].english === userAnswer) ? "success" : "danger";
     }
     
     setAns(ans as Variant);
@@ -78,6 +124,15 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     }
   };
 
+  const handleEasyModeChoice = (index: number) => {
+    setSelectedChoice(index);
+    // Create a synthetic event for the form submission
+    const event = new Event('submit', { bubbles: true });
+    setTimeout(() => {
+      sendAnswer({ preventDefault: () => {} } as any);
+    }, 100);
+  };
+
   const goToNextWord = () => {
     let p = getRan();
     setPos(p);
@@ -87,6 +142,13 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     setDisplayAnswer('');
     setShowFeedback(false);
     setTries(0);
+    setSelectedChoice(null);
+    
+    // Generate choices for easy mode
+    if (initialQuizMode === 'easy') {
+      const correctAnswer = initialMode === 'english-to-thai' ? subsetData[p].thai : subsetData[p].english;
+      generateChoices(p, correctAnswer);
+    }
   };
 
   //TODO update the type to use React.FormEvent<HTMLInputElement>
@@ -117,8 +179,14 @@ export const App:FunctionComponent<IAppProps> = (props) => {
       setPos(p);
       setCurrentWord(subsetData[p][initialMode === 'english-to-thai' ? 'english' : 'thai'])
       setSoundPath(getSoundPath(soundsPath, subsetData[p].english));
+      
+      // Generate choices for easy mode
+      if (initialQuizMode === 'easy') {
+        const correctAnswer = initialMode === 'english-to-thai' ? subsetData[p].thai : subsetData[p].english;
+        generateChoices(p, correctAnswer);
+      }
     }
-  }, [subsetData, initialMode]);
+  }, [subsetData, initialMode, initialQuizMode]);
 
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
@@ -141,35 +209,68 @@ export const App:FunctionComponent<IAppProps> = (props) => {
             {/* Form */}
             <form onSubmit={sendAnswer} className="space-y-4">
               
-              {/* Answer Input */}
-              <div>
-                <label htmlFor="answer-input" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Your Answer
-                </label>
-                <input
-                  id="answer-input"
-                  type="text"
-                  value={entered}
-                  onChange={handleChange}
-                  placeholder="Type your answer here..."
-                  className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none ${
-                    shakeAnswer 
-                      ? 'border-red-400 animate-shake' 
-                      : bloomAnswer 
-                      ? 'border-green-400 animate-bloom' 
-                      : 'border-gray-300 focus:border-blue-500'
-                  }`}
-                  autoFocus
-                />
-              </div>
+              {/* Hard Mode: Text Input */}
+              {initialQuizMode === 'hard' && (
+                <>
+                  {/* Answer Input */}
+                  <div>
+                    <label htmlFor="answer-input" className="block text-sm font-semibold text-gray-700 mb-2">
+                      Your Answer
+                    </label>
+                    <input
+                      id="answer-input"
+                      type="text"
+                      value={entered}
+                      onChange={handleChange}
+                      placeholder="Type your answer here..."
+                      className={`w-full px-4 py-3 rounded-lg border-2 transition-all focus:outline-none ${
+                        shakeAnswer 
+                          ? 'border-red-400 animate-shake' 
+                          : bloomAnswer 
+                          ? 'border-green-400 animate-bloom' 
+                          : 'border-gray-300 focus:border-blue-500'
+                      }`}
+                      autoFocus
+                    />
+                  </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl text-sm"
-              >
-                Check Answer
-              </button>
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl text-sm"
+                  >
+                    Check Answer
+                  </button>
+                </>
+              )}
+
+              {/* Easy Mode: Multiple Choice */}
+              {initialQuizMode === 'easy' && (
+                <>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Choose the correct answer:
+                  </label>
+                  <div className="space-y-2">
+                    {choices.map((choice, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleEasyModeChoice(index)}
+                        disabled={showFeedback}
+                        className={`w-full py-4 px-4 rounded-lg font-semibold transition-all duration-200 border-2 text-base ${
+                          selectedChoice === index && showFeedback
+                            ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
+                            : selectedChoice === index
+                            ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
+                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+                        }`}
+                      >
+                        {choice}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
 
               {/* Next Word Button - Only show after feedback */}
               {showFeedback && (
@@ -205,7 +306,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
                       <p className="font-bold mb-1">{answer}</p>
                       {ans !== 'success' && (
                         <p className="text-xs opacity-90">
-                          You entered: <span className="font-semibold">{displayAnswer}</span>
+                          You chose: <span className="font-semibold">{initialQuizMode === 'easy' && selectedChoice !== null ? choices[selectedChoice] : displayAnswer}</span>
                         </p>
                       )}
                     </div>

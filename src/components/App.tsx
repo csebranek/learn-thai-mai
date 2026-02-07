@@ -161,12 +161,33 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     .then(response => {
       if (response.status === 200) {
         let aud = new Audio(soundPath);
-        aud.play();
+        
+        // Add error handler to catch codec issues
+        aud.onerror = (error) => {
+          console.error('Audio playback error:', error);
+          alert('Unable to play this sound file. It may be in an unsupported format.');
+        };
+        
+        // Load the audio before attempting to play
+        aud.load();
+        
+        // Attempt to play after loading
+        const playPromise = aud.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error('Audio play error:', error);
+            alert('Unable to play this sound file. It may be in an unsupported format.');
+          });
+        }
       }else if (response.status === 404) {
         alert('Sound clip for this word not found!');
       } else {
         alert(response.statusText);
       }
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+      alert('Error loading audio file');
     });
   }
 

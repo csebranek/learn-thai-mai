@@ -1,11 +1,11 @@
 import Data from '../data/phrases.json'
 import React, {FunctionComponent, useEffect, useState} from 'react'
+import { generateChoicesForQuestion, getRandomIndex, isAnswerCorrect, QuestionItem } from '../utils/questionUtils'
 
 export type Variant = "success" | "danger" | "warning" | undefined
 
 interface IAppProps {
-  data?: any;
-  subsetData?: any;
+  subsetData?: QuestionItem[];
   mode?: string;
   category?: string;
   quizMode?: string;
@@ -14,15 +14,14 @@ interface IAppProps {
 const soundsPath = process.env.PUBLIC_URL + '/assets/sounds/';
 
 
-//TODO set initial state in () below.
 export const App:FunctionComponent<IAppProps> = (props) => {
-  const initialSubsetData = props.subsetData || Data;
+  const initialSubsetData: QuestionItem[] = props.subsetData || Data;
   const initialMode = props.mode || 'english-to-thai';
   const initialQuizMode = props.quizMode || 'easy';
 
   const [entered, setEntered] = useState('');
   const [displayAnswer, setDisplayAnswer] = useState('');
-  const [subsetData, setSubsetData] = useState(initialSubsetData);
+  const [subsetData, setSubsetData] = useState<QuestionItem[]>(initialSubsetData);
   const [pos, setPos] = useState(0);
   const [answer, setAnswer] = useState(initialSubsetData[0]?.thai || '');
   const [currentWord, setCurrentWord] = useState(initialSubsetData[0]?.[initialMode === 'english-to-thai' ? 'english' : 'thai'] || '');
@@ -34,7 +33,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
   const [shakeAnswer, setShakeAnswer] = useState(false);
   const [bloomAnswer, setBloomAnswer] = useState(false);
   const [soundPath, setSoundPath] = useState<string>('../assets/sounds/beer.m4a')
-  const [choices, setChoices] = useState<any[]>([]);
+  const [choices, setChoices] = useState<string[]>([]);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
 
   // Update subsetData when props change
@@ -42,55 +41,29 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     setSubsetData(initialSubsetData);
   }, [initialSubsetData]);
 
-  const getRan = () => {
-    return Math.floor(Math.random() * Math.floor(subsetData.length))
-  };
-
-
-  const getSoundPath = (soundsPath:string, newSound:string) => {
+  const getSoundPath = (sounds:string, newSound:string) => {
     //remove question marks from word, not allowed in filenames
-    newSound = newSound.replace(/[?]/g,'');
-    let soundPath = soundsPath + newSound + '.m4a';
-    return soundPath;
+    const clean = newSound.replace(/[?]/g,'');
+    return sounds + clean + '.m4a';
   }
 
-  const generateChoices = (currentIndex: number, correctAnswer: string) => {
-    // Get items from same category (or all if default)
-    let categoryData = subsetData;
-    if (props.category && props.category !== 'default') {
-      categoryData = subsetData.filter((item: any) => item.category === props.category);
-    }
-
-    // Get the correct answer field based on mode
+  const generateChoices = (correctAnswer: string) => {
     const correctAnswerField = initialMode === 'english-to-thai' ? 'thai' : 'english';
-    
-    // Get 3 random wrong answers from same category
-    const wrongAnswers: string[] = [];
-    while (wrongAnswers.length < 3) {
-      const randomIndex = Math.floor(Math.random() * categoryData.length);
-      const randomItem = categoryData[randomIndex];
-      const randomAnswer = randomItem[correctAnswerField];
-      
-      // Make sure it's not the correct answer and not already selected
-      if (randomAnswer !== correctAnswer && !wrongAnswers.includes(randomAnswer)) {
-        wrongAnswers.push(randomAnswer);
-      }
+    if (subsetData.length < 4) {
+      console.warn('Not enough data to generate multiple choice options (need at least 4 items).');
+      return;
     }
-
-    // Combine correct and wrong answers, then shuffle
-    const allChoices: string[] = [correctAnswer, ...wrongAnswers];
-    const shuffled = allChoices.sort(() => Math.random() - 0.5);
-    
+    const shuffled = generateChoicesForQuestion(correctAnswer, subsetData, correctAnswerField);
     setChoices(shuffled);
     setSelectedChoice(null);
   };
 
-  const sendAnswer = (e: any, choiceIndexOverride?: number) => {
+  const sendAnswer = (e: React.FormEvent, choiceIndexOverride?: number) => {
     e.preventDefault();
     setTries(tries + 1);
     
     let userAnswer = '';
-    let ans = "";
+    let result = "";
     
     if (initialQuizMode === 'easy') {
       // Multiple choice mode - use override if provided (for immediate submission)
@@ -107,17 +80,17 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     if (initialMode === 'english-to-thai') {
       setAnswer(subsetData[pos].thai);
       setPreviousWord(subsetData[pos].english);
-      ans = (subsetData[pos].thai === userAnswer) ? "success" : "danger";
+      result = isAnswerCorrect(userAnswer, subsetData[pos].thai) ? "success" : "danger";
     } else {
       setAnswer(subsetData[pos].english);
       setPreviousWord(subsetData[pos].thai);
-      ans = (subsetData[pos].english === userAnswer) ? "success" : "danger";
+      result = isAnswerCorrect(userAnswer, subsetData[pos].english) ? "success" : "danger";
     }
     
-    setAns(ans as Variant);
+    setAns(result as Variant);
     setShowFeedback(true);
 
-    if (ans === "success") {
+    if (result === "success") {
       setBloomAnswer(true);
       setTimeout(() => setBloomAnswer(false), 600);
     } else {
@@ -128,11 +101,11 @@ export const App:FunctionComponent<IAppProps> = (props) => {
 
   const handleEasyModeChoice = (index: number) => {
     // Immediately submit with the chosen index, don't wait for state to update
-    sendAnswer({ preventDefault: () => {} } as any, index);
+    sendAnswer({ preventDefault: () => {} } as React.FormEvent, index);
   };
 
   const goToNextWord = () => {
-    let p = getRan();
+    const p = getRandomIndex(subsetData.length);
     setPos(p);
     setCurrentWord(subsetData[p][initialMode === 'english-to-thai' ? 'english' : 'thai']);
     setSoundPath(getSoundPath(soundsPath, subsetData[p].english));
@@ -145,22 +118,20 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     // Generate choices for easy mode
     if (initialQuizMode === 'easy') {
       const correctAnswer = initialMode === 'english-to-thai' ? subsetData[p].thai : subsetData[p].english;
-      generateChoices(p, correctAnswer);
+      generateChoices(correctAnswer);
     }
   };
 
-  //TODO update the type to use React.FormEvent<HTMLInputElement>
-  // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/16208
-  const handleChange = (event:any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEntered(event.currentTarget.value)
   };
 
   const loadAndPlay = () => {
-    let url = soundPath;
+    const url = soundPath;
     fetch(url)
     .then(response => {
       if (response.status === 200) {
-        let aud = new Audio(soundPath);
+        const aud = new Audio(soundPath);
         
         // Add error handler to catch codec issues
         aud.onerror = (error) => {
@@ -194,7 +165,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
   //do this then set other things
   useEffect(() => {
     if (subsetData.length > 0) {
-      let p = getRan();
+      const p = getRandomIndex(subsetData.length);
       setPos(p);
       setCurrentWord(subsetData[p][initialMode === 'english-to-thai' ? 'english' : 'thai'])
       setSoundPath(getSoundPath(soundsPath, subsetData[p].english));
@@ -202,7 +173,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
       // Generate choices for easy mode
       if (initialQuizMode === 'easy') {
         const correctAnswer = initialMode === 'english-to-thai' ? subsetData[p].thai : subsetData[p].english;
-        generateChoices(p, correctAnswer);
+        generateChoices(correctAnswer);
       }
     }
   }, [subsetData, initialMode, initialQuizMode]);
@@ -277,9 +248,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
                         onClick={() => handleEasyModeChoice(index)}
                         disabled={showFeedback}
                         className={`w-full py-4 px-4 rounded-lg font-semibold transition-all duration-200 border-2 text-base ${
-                          selectedChoice === index && showFeedback
-                            ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
-                            : selectedChoice === index
+                          selectedChoice === index
                             ? 'bg-blue-500 text-white border-blue-600 shadow-lg'
                             : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
                         }`}

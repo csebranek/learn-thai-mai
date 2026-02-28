@@ -18,18 +18,12 @@ export const Settings: FunctionComponent<ISettingsProps> = ({
   onQuizModeChange
 }) => {
 
-  const handleCategoryChange = (event: any) => {
-    const selectedCategory = event.currentTarget.value;
-    onCategoryChange(selectedCategory);
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onCategoryChange(event.currentTarget.value);
   }
 
-  const handleModeChange = (event: any) => {
-    const selectedMode = event.currentTarget.value;
-    onModeChange(selectedMode);
-  }
-
-  const handleQuizModeChange = (selectedQuizMode: string) => {
-    onQuizModeChange(selectedQuizMode);
+  const handleModeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onModeChange(event.currentTarget.value);
   }
 
   return (
@@ -91,7 +85,7 @@ export const Settings: FunctionComponent<ISettingsProps> = ({
             </label>
             <div className="flex gap-3">
               <button
-                onClick={() => handleQuizModeChange('easy')}
+                onClick={() => onQuizModeChange('easy')}
                 className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 border-2 ${
                   quizMode === 'easy'
                     ? 'bg-green-500 text-white border-green-600 shadow-lg'
@@ -101,7 +95,7 @@ export const Settings: FunctionComponent<ISettingsProps> = ({
                 ✓ Easy (Multiple Choice)
               </button>
               <button
-                onClick={() => handleQuizModeChange('hard')}
+                onClick={() => onQuizModeChange('hard')}
                 className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all duration-200 border-2 ${
                   quizMode === 'hard'
                     ? 'bg-blue-500 text-white border-blue-600 shadow-lg'

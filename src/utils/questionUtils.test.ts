@@ -63,6 +63,27 @@ describe('Question Utilities', () => {
       expect(set1.has('สวัสดี')).toBe(true);
       expect(set2.has('สวัสดี')).toBe(true);
     });
+
+    it('should only include choices from the correct answer field', () => {
+      const choices = generateChoicesForQuestion('สวัสดี', mockData, 'thai');
+      // All choices should be Thai values
+      const thaiValues = mockData.map(item => item.thai);
+      choices.forEach(choice => {
+        expect(thaiValues).toContain(choice);
+      });
+    });
+
+    it('should throw if unable to generate 3 unique wrong answers', () => {
+      const duplicateData: QuestionItem[] = [
+        { english: 'hello', thai: 'สวัสดี', category: 'general' },
+        { english: 'hello2', thai: 'สวัสดี', category: 'general' },
+        { english: 'hello3', thai: 'สวัสดี', category: 'general' },
+        { english: 'hello4', thai: 'สวัสดี', category: 'general' },
+      ];
+      expect(() => {
+        generateChoicesForQuestion('สวัสดี', duplicateData, 'thai');
+      }).toThrow('Could not generate 3 unique wrong answers');
+    });
   });
 
   describe('isAnswerCorrect', () => {
@@ -86,6 +107,18 @@ describe('Question Utilities', () => {
     it('should work with Thai characters', () => {
       expect(isAnswerCorrect('สวัสดี', 'สวัสดี')).toBe(true);
       expect(isAnswerCorrect('สวัสดี', 'ลาก่อน')).toBe(false);
+    });
+
+    it('should return false for empty answer against non-empty correct answer', () => {
+      expect(isAnswerCorrect('', 'hello')).toBe(false);
+    });
+
+    it('should return true for two empty strings', () => {
+      expect(isAnswerCorrect('', '')).toBe(true);
+    });
+
+    it('should handle whitespace-only answers', () => {
+      expect(isAnswerCorrect('   ', 'hello')).toBe(false);
     });
   });
 
@@ -112,6 +145,19 @@ describe('Question Utilities', () => {
       }
       // Should hit at least 3 different values in 100 attempts with length 5
       expect(results.size).toBeGreaterThanOrEqual(3);
+    });
+
+    it('should always return 0 for length 1', () => {
+      for (let i = 0; i < 10; i++) {
+        expect(getRandomIndex(1)).toBe(0);
+      }
+    });
+
+    it('should return only integers', () => {
+      for (let i = 0; i < 20; i++) {
+        const index = getRandomIndex(100);
+        expect(Number.isInteger(index)).toBe(true);
+      }
     });
   });
 });

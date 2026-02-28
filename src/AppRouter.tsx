@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './components/App'
 import Settings from './components/Settings'
 import Data from './data/phrases.json'
+import { QuestionItem } from './utils/questionUtils'
+
+const data: QuestionItem[] = Data;
 
 export const AppRouter: FunctionComponent = () => {
   const [category, setCategory] = useState(() => {
@@ -14,8 +17,7 @@ export const AppRouter: FunctionComponent = () => {
   const [quizMode, setQuizMode] = useState(() => {
     return localStorage.getItem('thaiquizmode') || 'easy';
   });
-  const [data] = useState(Data);
-  const [subsetData, setSubsetData] = useState(Data);
+  const [subsetData, setSubsetData] = useState<QuestionItem[]>(data);
 
   // Persist settings to localStorage whenever they change
   useEffect(() => {
@@ -37,21 +39,8 @@ export const AppRouter: FunctionComponent = () => {
       return;
     }
 
-    const subset = data.filter((item: any) => item.category === category);
-    setSubsetData(subset);
-  }, [category, data]);
-
-  const handleCategoryChange = (selectedCategory: string) => {
-    setCategory(selectedCategory);
-  }
-
-  const handleModeChange = (selectedMode: string) => {
-    setMode(selectedMode);
-  }
-
-  const handleQuizModeChange = (selectedQuizMode: string) => {
-    setQuizMode(selectedQuizMode);
-  }
+    setSubsetData(data.filter(item => item.category === category));
+  }, [category]);
 
   return (
     <Router basename="/thai">
@@ -60,7 +49,6 @@ export const AppRouter: FunctionComponent = () => {
           path="/" 
           element={
             <App 
-              data={data}
               subsetData={subsetData}
               mode={mode}
               category={category}
@@ -75,9 +63,9 @@ export const AppRouter: FunctionComponent = () => {
               category={category}
               mode={mode}
               quizMode={quizMode}
-              onCategoryChange={handleCategoryChange}
-              onModeChange={handleModeChange}
-              onQuizModeChange={handleQuizModeChange}
+              onCategoryChange={setCategory}
+              onModeChange={setMode}
+              onQuizModeChange={setQuizMode}
             />
           } 
         />

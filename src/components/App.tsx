@@ -208,7 +208,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
   }, [subsetData, initialMode, initialQuizMode]);
 
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen flex flex-col items-center p-4 py-8">
         <div className="w-full max-w-md">
           {/* Main Card */}
           <div className="bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-6 border border-white/20">

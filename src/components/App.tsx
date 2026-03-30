@@ -1,5 +1,5 @@
 import Data from '../data/phrases.json'
-import React, {FunctionComponent, useEffect, useState} from 'react'
+import React, {FunctionComponent, useCallback, useEffect, useState} from 'react'
 
 export type Variant = "success" | "danger" | "warning" | undefined
 
@@ -42,9 +42,9 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     setSubsetData(initialSubsetData);
   }, [initialSubsetData]);
 
-  const getRan = () => {
+  const getRan = useCallback(() => {
     return Math.floor(Math.random() * Math.floor(subsetData.length))
-  };
+  }, [subsetData.length]);
 
 
   const getSoundPath = (soundsPath:string, newSound:string) => {
@@ -54,7 +54,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     return soundPath;
   }
 
-  const generateChoices = (currentIndex: number, correctAnswer: string) => {
+  const generateChoices = useCallback((currentIndex: number, correctAnswer: string) => {
     // Get items from same category (or all if default)
     let categoryData = subsetData;
     if (props.category && props.category !== 'default') {
@@ -83,7 +83,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
     
     setChoices(shuffled);
     setSelectedChoice(null);
-  };
+  }, [subsetData, props.category, initialMode]);
 
   const sendAnswer = (e: any, choiceIndexOverride?: number) => {
     e.preventDefault();
@@ -205,7 +205,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
         generateChoices(p, correctAnswer);
       }
     }
-  }, [subsetData, initialMode, initialQuizMode]);
+  }, [subsetData, initialMode, initialQuizMode, getRan, generateChoices]);
 
     return (
       <div className="min-h-screen flex flex-col items-center p-4 py-8">

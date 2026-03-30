@@ -8,7 +8,7 @@ This app uses Firebase Analytics (same config as the parent site `chadsebranek.c
 
 To build and deploy:
 
-`npm install & npm run-script build && cp -r build/* /var/www/html/thai/ && cp -r public/assets/images/* /var/www/html/thai/public/assets/images/`
+`npm install && npm run-script build && cp -r build/* /var/www/html/thai/ && cp -r public/assets/images/* /var/www/html/thai/public/assets/images/`
 
 After adding new words for google to translate, run: 
 

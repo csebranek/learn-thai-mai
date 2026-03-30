@@ -1,0 +1,42 @@
+name: Firebase API Key Rotation Reminder
+
+on:
+  schedule:
+    # Runs at 9:00 AM UTC on the 1st of every quarter (Jan, Apr, Jul, Oct)
+    - cron: '0 9 1 */3 *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  create-reminder:
+    name: Create rotation reminder issue
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Check for existing open reminder
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'key-rotation',
+              per_page: 1
+            });
+            return issues.data.length > 0;
+
+      - name: Create reminder issue
+        if: steps.check.outputs.result != 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const today = new Date().toISOString().split('T')[0];
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔑 Rotate Firebase API key (${today})`,
+              body: `## Firebase API Key Rotation Reminder\n\nIt's time to rotate the Firebase API key for the **chad-sebranek-website** project.\n\n### Steps to rotate:\n\n1. Go to [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials?project=chad-sebranek-website)\n2. Find the current API key and click **Edit**\n3. Click **Regenerate key** and confirm\n4. Copy the new key\n5. Update the \`REACT_APP_FIREBASE_API_KEY\` environment variable in your deployment environment (e.g. Netlify, Vercel, or hosting provider env vars)\n6. Verify the site still works (check Firebase Analytics is receiving events)\n7. Close this issue\n\n### Why rotate?\n\nRegular key rotation limits the window of exposure if a key is ever compromised. Even though Firebase web API keys are designed to be public, rotation is a security best practice.\n\n---\n*This issue was automatically created by the [key rotation reminder workflow](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/workflows/firebase-key-rotation-reminder.yml).*`,
+              labels: ['key-rotation']
+            });

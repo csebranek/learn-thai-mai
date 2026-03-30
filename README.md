@@ -2,19 +2,7 @@
 
 ## Analytics
 
-This app uses Google Analytics 4 (GA4) for visitor tracking. GA4 natively provides:
-
-- **Geographic location tracking** – automatically tracks visitor country, city, and region via IP-based geolocation
-- **Bot detection/filtering** – automatically excludes known bots and spiders using the IAB/ABC International Spiders & Bots List
-- **Referral URL tracking** – tracks traffic acquisition sources including referring URLs, organic search, direct traffic, and social media
-
-To enable analytics, copy `.env.example` to `.env` and set your GA4 Measurement ID:
-
-```
-REACT_APP_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
-
-You can find your Measurement ID in Google Analytics under Admin > Data Streams > Web.
+This app uses Firebase Analytics (same config as the parent site `chadsebranek.com`). The tracking script is in `public/index.html`. If the Firebase project or measurement ID changes, update the `firebaseConfig` in that file to match the parent site.
 
 ## Build and Deploy
 

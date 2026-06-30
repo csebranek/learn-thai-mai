@@ -1,8 +1,10 @@
-[chadsebranek.com/thai](https://chadsebranek.com/thai)
+[chadsebranek.com/projects/thai](https://chadsebranek.com/projects/thai)
 
 ## Analytics
 
-This app uses Firebase Analytics (same config as the parent site `chadsebranek.com`). The tracking script is in `public/index.html`. If the Firebase project or measurement ID changes, update the `firebaseConfig` in that file to match the parent site.
+Analytics are injected automatically by the web server (Apache `mod_substitute`
+adds the site-wide GA4 tag to every page under `/projects/`), so this app needs
+no tracking code of its own.
 
 ## Build and Deploy
 

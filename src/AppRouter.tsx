@@ -54,7 +54,7 @@ export const AppRouter: FunctionComponent = () => {
   }
 
   return (
-    <Router basename="/thai">
+    <Router basename="/projects/thai">
       <Routes>
         <Route 
           path="/" 

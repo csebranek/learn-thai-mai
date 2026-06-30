@@ -353,7 +353,7 @@ export const App:FunctionComponent<IAppProps> = (props) => {
                 <span>Attempts: <span className="font-semibold text-gray-800">{tries}</span></span>
               </div>
               <a
-                href="/thai/options"
+                href="/projects/thai/options"
                 className="text-blue-500 hover:text-blue-700 font-semibold text-sm transition-colors"
               >
                 ⚙️ Settings

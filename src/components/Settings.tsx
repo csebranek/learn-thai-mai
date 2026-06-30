@@ -127,7 +127,7 @@ export const Settings: FunctionComponent<ISettingsProps> = ({
 
           {/* Back Button */}
           <a
-            href="/thai/"
+            href="/projects/thai/"
             className="w-full inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl"
           >
             ← Back to Learning
